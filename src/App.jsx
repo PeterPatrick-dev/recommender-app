@@ -9,6 +9,7 @@ import MyLibrary from './pages/MyLibrary'
 import ReadingProgress from './pages/ReadingProgress'
 import Settings from './pages/Settings'
 import './App.css'
+import Analytics from './pages/Analytics'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/library" element={<MyLibrary />} />
           <Route path="/progress" element={<ReadingProgress />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/analytics" element={<Analytics />} />
         </Routes>
       </div>
     </div>

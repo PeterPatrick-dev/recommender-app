@@ -1,18 +1,19 @@
 import { useState } from 'react'
 
 function Settings() {
-  const [dailyReminders, setDailyReminders] = useState(true)
+  const [dailyReminders, setDailyReminders] = useState(
+  localStorage.getItem('dailyReminders') !== 'false')
   const [continueReadingAlerts, setContinueReadingAlerts] = useState(true)
   const [name, setName] = useState("Priest Peterson")
   const [email, setEmail] = useState("priest@example.com")
   const [saved, setSaved] = useState(false)
 
   function handleSave(e) {
-    e.preventDefault()
-    // TEMPORARY — real save logic (to the database) comes in Phase 2
-    console.log("Settings saved:", { name, email, dailyReminders, continueReadingAlerts })
-    setSaved(true)
-  }
+  e.preventDefault()
+  localStorage.setItem('dailyReminders', dailyReminders)
+  console.log("Settings saved:", { name, email, dailyReminders, continueReadingAlerts })
+  setSaved(true)
+}
 
   function Toggle({ enabled, onToggle }) {
     return (

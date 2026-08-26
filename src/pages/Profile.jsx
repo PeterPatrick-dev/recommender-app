@@ -4,6 +4,7 @@ import axios from 'axios'
 function Profile() {
   const [user, setUser] = useState(null)
   const [history, setHistory] = useState([])
+  const [stats, setStats] = useState(null)
 
   useEffect(() => {
     const stored = localStorage.getItem('user')
@@ -11,9 +12,10 @@ function Profile() {
       setUser(JSON.parse(stored))
     }
 
+    const token = localStorage.getItem('token')
+    if (!token) return
+
     async function fetchHistory() {
-      const token = localStorage.getItem('token')
-      if (!token) return
       try {
         const response = await axios.get('http://localhost:5000/api/recommendations/history', {
           headers: { Authorization: `Bearer ${token}` }
@@ -24,7 +26,19 @@ function Profile() {
       }
     }
 
+    async function fetchStats() {
+      try {
+        const response = await axios.get('http://localhost:5000/api/analytics', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        setStats(response.data)
+      } catch (err) {
+        console.error('Error fetching stats:', err)
+      }
+    }
+
     fetchHistory()
+    fetchStats()
   }, [])
 
   if (!user) {
@@ -46,6 +60,23 @@ function Profile() {
           <p className="text-[#9a9186] text-sm">{user.email}</p>
         </div>
       </div>
+
+      {stats && (
+        <div className="grid grid-cols-3 gap-4 mb-10">
+          <div className="border border-[#3a352d] bg-[#161310] rounded-lg px-4 py-5 text-center">
+            <p className="text-2xl font-medium text-[#c9a96e]">{stats.booksCompleted}</p>
+            <p className="text-sm text-[#9a9186] mt-1">Books Read</p>
+          </div>
+          <div className="border border-[#3a352d] bg-[#161310] rounded-lg px-4 py-5 text-center">
+            <p className="text-2xl font-medium text-[#c9a96e]">{stats.currentStreak}</p>
+            <p className="text-sm text-[#9a9186] mt-1">Day Streak</p>
+          </div>
+          <div className="border border-[#3a352d] bg-[#161310] rounded-lg px-4 py-5 text-center">
+            <p className="text-lg font-medium text-[#c9a96e]">{stats.favoriteGenre}</p>
+            <p className="text-sm text-[#9a9186] mt-1">Favorite Genre</p>
+          </div>
+        </div>
+      )}
 
       <button className="px-6 py-2 rounded-lg border border-[#3a352d] text-[#f4ede1] hover:border-[#c9a96e] transition-colors mb-12">
         Edit Profile
