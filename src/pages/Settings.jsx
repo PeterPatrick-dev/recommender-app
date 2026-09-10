@@ -41,24 +41,26 @@ function Settings() {
         <div>
           <h2 className="text-sm tracking-wide text-[#c9a96e] uppercase mb-4">Account</h2>
           <div className="flex flex-col gap-4">
+           <div>
+  <label htmlFor="settings-name" className="block text-sm text-[#9a9186] mb-1">Name</label>
+  <input
+    id="settings-name"
+    type="text"
+    value={name}
+    onChange={(e) => setName(e.target.value)}
+    className="w-full px-4 py-3 rounded-lg bg-[#161310] border border-[#3a352d] text-[#f4ede1] focus:outline-none focus:border-[#c9a96e] transition-colors"
+  />
+</div>
             <div>
-              <label className="block text-sm text-[#9a9186] mb-1">Name</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-[#161310] border border-[#3a352d] text-[#f4ede1] focus:outline-none focus:border-[#c9a96e] transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-sm text-[#9a9186] mb-1">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg bg-[#161310] border border-[#3a352d] text-[#f4ede1] focus:outline-none focus:border-[#c9a96e] transition-colors"
-              />
-            </div>
+  <label htmlFor="settings-email" className="block text-sm text-[#9a9186] mb-1">Email</label>
+  <input
+    id="settings-email"
+    type="email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    className="w-full px-4 py-3 rounded-lg bg-[#161310] border border-[#3a352d] text-[#f4ede1] focus:outline-none focus:border-[#c9a96e] transition-colors"
+  />
+</div>
           </div>
         </div>
 

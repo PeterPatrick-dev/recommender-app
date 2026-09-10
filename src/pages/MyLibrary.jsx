@@ -12,10 +12,19 @@ function MyLibrary() {
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [category, setCategory] = useState("")
-  const [error, setError] = useState("")
   const [totalPages, setTotalPages] = useState("")
+  const [error, setError] = useState("")
+
+  const [searchQuery, setSearchQuery] = useState("")
+  const [genreFilter, setGenreFilter] = useState("")
+  const [minPages, setMinPages] = useState("")
+  const [maxPages, setMaxPages] = useState("")
+  const [minRating, setMinRating] = useState("")
 
   useEffect(() => {
+    fetchBooks()
+  }, [])
+
   async function fetchBooks() {
     const token = localStorage.getItem('token')
     if (!token) return
@@ -29,9 +38,6 @@ function MyLibrary() {
       console.error('Error fetching library:', err)
     }
   }
-
-  fetchBooks()
-}, [])
 
   async function addBook(e) {
     e.preventDefault()
@@ -60,37 +66,81 @@ function MyLibrary() {
   }
 
   async function removeBook(id) {
-  const token = localStorage.getItem('token')
-  try {
-    await axios.delete(`http://localhost:5000/api/books/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    setBooks(books.filter((book) => book._id !== id))
-  } catch (err) {
-    console.error('Error removing book:', err)
+    const token = localStorage.getItem('token')
+    try {
+      await axios.delete(`http://localhost:5000/api/books/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      setBooks(books.filter((book) => book._id !== id))
+    } catch (err) {
+      console.error('Error removing book:', err)
+    }
   }
-}
 
-async function updateStatus(id, newStatus) {
-  const token = localStorage.getItem('token')
-  try {
-    const response = await axios.patch(
-      `http://localhost:5000/api/books/${id}`,
-      { status: newStatus },
-      { headers: { Authorization: `Bearer ${token}` } }
-    )
-    setBooks(books.map((book) => (book._id === id ? response.data : book)))
-  } catch (err) {
-    console.error('Error updating book:', err)
+  async function updateStatus(id, newStatus) {
+    const token = localStorage.getItem('token')
+    try {
+      const response = await axios.patch(
+        `http://localhost:5000/api/books/${id}`,
+        { status: newStatus },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      setBooks(books.map((book) => (book._id === id ? response.data : book)))
+    } catch (err) {
+      console.error('Error updating book:', err)
+    }
   }
-}
+
+  async function updateRating(id, newRating) {
+    const token = localStorage.getItem('token')
+    try {
+      const response = await axios.patch(
+        `http://localhost:5000/api/books/${id}`,
+        { rating: newRating },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      setBooks(books.map((book) => (book._id === id ? response.data : book)))
+    } catch (err) {
+      console.error('Error updating rating:', err)
+    }
+  }
+
+  async function handleSearch() {
+    const token = localStorage.getItem('token')
+    if (!token) return
+
+    try {
+      const params = new URLSearchParams()
+      if (searchQuery) params.append('q', searchQuery)
+      if (genreFilter) params.append('genre', genreFilter)
+      if (minPages) params.append('minPages', minPages)
+      if (maxPages) params.append('maxPages', maxPages)
+      if (minRating) params.append('minRating', minRating)
+
+      const response = await axios.get(`http://localhost:5000/api/books/search?${params.toString()}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      setBooks(response.data)
+    } catch (err) {
+      console.error('Error searching library:', err)
+    }
+  }
+
+  function clearFilters() {
+    setSearchQuery("")
+    setGenreFilter("")
+    setMinPages("")
+    setMaxPages("")
+    setMinRating("")
+    fetchBooks()
+  }
 
   return (
     <div className="max-w-3xl mx-auto py-16">
       <h1 className="text-3xl font-medium mb-2">My Library</h1>
       <p className="text-[#9a9186] mb-8">{books.length} books saved</p>
 
-      <form onSubmit={addBook} className="flex flex-col gap-3 mb-10 border border-[#3a352d] bg-[#161310] rounded-lg p-5">
+      <form onSubmit={addBook} className="flex flex-col gap-3 mb-8 border border-[#3a352d] bg-[#161310] rounded-lg p-5">
         <h2 className="text-sm tracking-wide text-[#c9a96e] uppercase mb-1">Add a book</h2>
         <input
           type="text"
@@ -124,7 +174,7 @@ async function updateStatus(id, newStatus) {
           required
           className="w-full px-4 py-2 rounded-md bg-[#0e0c0a] border border-[#3a352d] text-[#f4ede1] focus:outline-none focus:border-[#c9a96e]"
         />
-               {error && <p className="text-sm text-[#c97a6e]">{error}</p>}
+        {error && <p className="text-sm text-[#c97a6e]">{error}</p>}
         <button
           type="submit"
           className="self-start px-5 py-2 rounded-md bg-[#c9a96e] text-[#0e0c0a] font-medium hover:bg-[#d9bc85] transition-colors"
@@ -132,6 +182,66 @@ async function updateStatus(id, newStatus) {
           Add Book
         </button>
       </form>
+
+      <div className="flex flex-col gap-3 mb-8 border border-[#3a352d] bg-[#161310] rounded-lg p-5">
+        <h2 className="text-sm tracking-wide text-[#c9a96e] uppercase mb-1">Search & Filter</h2>
+        <input
+          type="text"
+          placeholder="Search by title or author..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full px-4 py-2 rounded-md bg-[#0e0c0a] border border-[#3a352d] text-[#f4ede1] focus:outline-none focus:border-[#c9a96e]"
+        />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <input
+            type="text"
+            placeholder="Genre"
+            value={genreFilter}
+            onChange={(e) => setGenreFilter(e.target.value)}
+            className="px-3 py-2 rounded-md bg-[#0e0c0a] border border-[#3a352d] text-[#f4ede1] text-sm focus:outline-none focus:border-[#c9a96e]"
+          />
+          <input
+            type="number"
+            placeholder="Min pages"
+            value={minPages}
+            onChange={(e) => setMinPages(e.target.value)}
+            className="px-3 py-2 rounded-md bg-[#0e0c0a] border border-[#3a352d] text-[#f4ede1] text-sm focus:outline-none focus:border-[#c9a96e]"
+          />
+          <input
+            type="number"
+            placeholder="Max pages"
+            value={maxPages}
+            onChange={(e) => setMaxPages(e.target.value)}
+            className="px-3 py-2 rounded-md bg-[#0e0c0a] border border-[#3a352d] text-[#f4ede1] text-sm focus:outline-none focus:border-[#c9a96e]"
+          />
+          <select
+            value={minRating}
+            onChange={(e) => setMinRating(e.target.value)}
+            className="px-3 py-2 rounded-md bg-[#0e0c0a] border border-[#3a352d] text-[#f4ede1] text-sm focus:outline-none focus:border-[#c9a96e]"
+          >
+            <option value="">Any rating</option>
+            <option value="1">1+ stars</option>
+            <option value="2">2+ stars</option>
+            <option value="3">3+ stars</option>
+            <option value="4">4+ stars</option>
+            <option value="5">5 stars</option>
+          </select>
+        </div>
+        <div className="flex gap-3">
+          <button
+            onClick={handleSearch}
+            className="px-5 py-2 rounded-md bg-[#c9a96e] text-[#0e0c0a] font-medium hover:bg-[#d9bc85] transition-colors"
+          >
+            Search
+          </button>
+          <button
+            onClick={clearFilters}
+            className="px-5 py-2 rounded-md border border-[#3a352d] text-[#9a9186] hover:text-[#c9a96e] transition-colors"
+          >
+            Clear
+          </button>
+        </div>
+      </div>
 
       {books.length === 0 ? (
         <p className="text-[#9a9186]">Your library is empty. Add a book above to get started.</p>
@@ -166,6 +276,18 @@ async function updateStatus(id, newStatus) {
                   <option value="Completed">Completed</option>
                 </select>
               </div>
+
+              <div className="flex gap-1 mt-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    onClick={() => updateRating(book._id, star)}
+                    className={`text-lg ${star <= book.rating ? "text-[#c9a96e]" : "text-[#3a352d]"}`}
+                  >
+                    ★
+                  </button>
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -173,4 +295,5 @@ async function updateStatus(id, newStatus) {
     </div>
   )
 }
+
 export default MyLibrary
