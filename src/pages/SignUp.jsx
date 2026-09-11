@@ -29,58 +29,59 @@ function SignUp() {
 
   return (
     <div className="max-w-sm mx-auto py-16">
-      <h1 className="text-3xl font-medium mb-2 text-center">Create your account</h1>
-      <p className="text-[#9a9186] text-center mb-8">Start getting personalized book recommendations.</p>
+      <h1 className="text-3xl font-medium mb-2 text-center text-[#2b2620]">Create your account</h1>
+      <p className="text-[#7a7060] text-center mb-8">Start getting personalized book recommendations.</p>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-white border border-[#e3dcc9] rounded-xl p-6">
         <div>
-  <label htmlFor="name" className="block text-sm text-[#c9a96e] mb-1">Name</label>
-  <input
-    id="name"
-    type="text"
-    value={name}
-    onChange={(e) => setName(e.target.value)}
-    required
-    className="w-full px-4 py-3 rounded-lg bg-[#161310] border border-[#3a352d] text-[#f4ede1] focus:outline-none focus:border-[#c9a96e] transition-colors"
-  />
-</div>
-<div>
-  <label htmlFor="signup-email" className="block text-sm text-[#c9a96e] mb-1">Email</label>
-  <input
-    id="signup-email"
-    type="email"
-    value={email}
-    onChange={(e) => setEmail(e.target.value)}
-    required
-    className="w-full px-4 py-3 rounded-lg bg-[#161310] border border-[#3a352d] text-[#f4ede1] focus:outline-none focus:border-[#c9a96e] transition-colors"
-  />
-</div>
-<div>
-  <label htmlFor="signup-password" className="block text-sm text-[#c9a96e] mb-1">Password</label>
-  <input
-    id="signup-password"
-    type="password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    required
-    minLength={6}
-    className="w-full px-4 py-3 rounded-lg bg-[#161310] border border-[#3a352d] text-[#f4ede1] focus:outline-none focus:border-[#c9a96e] transition-colors"
-  />
-</div>
-        {error && <p className="text-sm text-[#c97a6e]">{error}</p>}
+          <label htmlFor="name" className="block text-sm text-[#a8763a] mb-1">Name</label>
+          <input
+            id="name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="w-full px-4 py-3 rounded-lg bg-white border border-[#e3dcc9] text-[#2b2620] focus:outline-none focus:border-[#a8763a] transition-colors"
+          />
+        </div>
+        <div>
+          <label htmlFor="signup-email" className="block text-sm text-[#a8763a] mb-1">Email</label>
+          <input
+            id="signup-email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-4 py-3 rounded-lg bg-white border border-[#e3dcc9] text-[#2b2620] focus:outline-none focus:border-[#a8763a] transition-colors"
+          />
+        </div>
+        <div>
+          <label htmlFor="signup-password" className="block text-sm text-[#a8763a] mb-1">Password</label>
+          <input
+            id="signup-password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength={6}
+            className="w-full px-4 py-3 rounded-lg bg-white border border-[#e3dcc9] text-[#2b2620] focus:outline-none focus:border-[#a8763a] transition-colors"
+          />
+        </div>
+
+        {error && <p className="text-sm text-[#c0503a]">{error}</p>}
 
         <button
           type="submit"
           disabled={loading}
-          className="mt-2 px-6 py-3 rounded-lg bg-[#c9a96e] text-[#0e0c0a] font-medium hover:bg-[#d9bc85] transition-colors disabled:opacity-50"
+          className="mt-2 px-6 py-3 rounded-lg bg-[#a8763a] text-white font-medium hover:bg-[#b8854a] transition-colors disabled:opacity-50"
         >
           {loading ? "Creating account..." : "Sign Up"}
         </button>
       </form>
 
-      <p className="text-sm text-[#9a9186] text-center mt-6">
+      <p className="text-sm text-[#7a7060] text-center mt-6">
         Already have an account?{" "}
-        <Link to="/login" className="text-[#c9a96e] hover:underline">Log in</Link>
+        <Link to="/login" className="text-[#a8763a] font-medium hover:underline">Log in</Link>
       </p>
     </div>
   )

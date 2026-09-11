@@ -8,14 +8,14 @@ import Profile from './pages/Profile'
 import MyLibrary from './pages/MyLibrary'
 import ReadingProgress from './pages/ReadingProgress'
 import Settings from './pages/Settings'
+
 import './App.css'
-import Analytics from './pages/Analytics'
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#0e0c0a] text-[#f4ede1] font-serif">
+    <div className="min-h-screen bg-[#f7f2e7] text-[#2b2620] font-serif">
       <NavBar />
-      <div className="px-4">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -25,7 +25,6 @@ function App() {
           <Route path="/library" element={<MyLibrary />} />
           <Route path="/progress" element={<ReadingProgress />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/analytics" element={<Analytics />} />
         </Routes>
       </div>
     </div>

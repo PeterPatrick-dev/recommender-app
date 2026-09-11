@@ -22,11 +22,11 @@ function Recommendation() {
     setLoading(true)
     try {
       const token = localStorage.getItem('token')
-const response = await axios.post(
-  'http://localhost:5000/api/recommend',
-  finalAnswers,
-  token ? { headers: { Authorization: `Bearer ${token}` } } : {}
-)
+      const response = await axios.post(
+        'http://localhost:5000/api/recommend',
+        finalAnswers,
+        token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+      )
       setResult(response.data)
     } catch (error) {
       console.error('Error calling backend:', error)
@@ -56,20 +56,20 @@ const response = await axios.post(
   }
 
   return (
-    <div className="w-full max-w-lg mx-auto py-10">
+    <div className="max-w-lg mx-auto py-10">
       {step < questions.length ? (
         <div className="w-full">
-          <div className="w-full h-1 bg-[#2a2520] rounded-full mb-8 overflow-hidden">
+          <div className="w-full h-1 bg-[#e3dcc9] rounded-full mb-8 overflow-hidden">
             <div
-              className="h-full bg-[#c9a96e] transition-all duration-300"
+              className="h-full bg-[#a8763a] transition-all duration-300"
               style={{ width: `${((step) / questions.length) * 100}%` }}
             ></div>
           </div>
 
-          <p className="text-sm tracking-wide text-[#c9a96e] mb-2">
+          <p className="text-sm tracking-wide text-[#a8763a] mb-2">
             Question {step + 1} of {questions.length}
           </p>
-          <h2 className="text-2xl md:text-3xl font-medium mb-6">
+          <h2 className="text-2xl md:text-3xl font-medium mb-6 text-[#2b2620]">
             {currentQuestion.text}
           </h2>
 
@@ -79,7 +79,7 @@ const response = await axios.post(
                 <button
                   key={option}
                   onClick={() => handleChoice(option)}
-                  className="text-left px-5 py-3 rounded-lg border border-[#3a352d] bg-[#161310] hover:border-[#c9a96e] hover:bg-[#1f1a15] transition-colors"
+                  className="text-left px-5 py-3 rounded-lg border border-[#e3dcc9] bg-white hover:border-[#a8763a] hover:bg-[#faf6ec] transition-colors text-[#2b2620]"
                 >
                   {option}
                 </button>
@@ -94,11 +94,11 @@ const response = await axios.post(
                 value={answers[currentQuestion.id] || ""}
                 onChange={handleTextChange}
                 placeholder="Type your answer..."
-                className="w-full px-4 py-3 rounded-lg bg-[#161310] border border-[#3a352d] text-[#f4ede1] placeholder-[#6b6357] focus:outline-none focus:border-[#c9a96e] transition-colors"
+                className="w-full px-4 py-3 rounded-lg bg-white border border-[#e3dcc9] text-[#2b2620] placeholder-[#a39a86] focus:outline-none focus:border-[#a8763a] transition-colors"
               />
               <button
                 onClick={handleNext}
-                className="self-start px-6 py-2 rounded-lg bg-[#c9a96e] text-[#0e0c0a] font-medium hover:bg-[#d9bc85] transition-colors"
+                className="self-start px-6 py-2 rounded-lg bg-[#a8763a] text-white font-medium hover:bg-[#b8854a] transition-colors"
               >
                 Next
               </button>
@@ -107,19 +107,19 @@ const response = await axios.post(
         </div>
       ) : (
         <div className="w-full">
-          {loading && <p className="text-[#c9a96e]">Loading your recommendations...</p>}
+          {loading && <p className="text-[#a8763a]">Loading your recommendations...</p>}
           {result && result.recommendations && (
             <div>
-              <h2 className="text-2xl font-medium mb-6 text-center">Your Recommendations</h2>
+              <h2 className="text-2xl font-medium mb-6 text-center text-[#2b2620]">Your Recommendations</h2>
               {result.recommendations.map((book, index) => (
                 <div
                   key={index}
-                  className="border-l-4 border-[#c9a96e] bg-[#161310] px-5 py-4 mb-4 rounded-r-lg text-left"
+                  className="bg-white border border-[#e3dcc9] border-l-4 border-l-[#a8763a] px-5 py-4 mb-4 rounded-r-lg rounded-l-none text-left"
                 >
-                  <h3 className="text-lg font-semibold">{book.title}</h3>
-                  <p className="text-[#c9a96e] text-sm mb-2">by {book.author}</p>
-                  <p className="text-[#d8d0c4] mb-2">{book.reason}</p>
-                  <p className="text-sm italic text-[#9a9186]">{book.genre} · {book.mood}</p>
+                  <h3 className="text-lg font-semibold text-[#2b2620]">{book.title}</h3>
+                  <p className="text-[#a8763a] text-sm mb-2">by {book.author}</p>
+                  <p className="text-[#5a5346] mb-2">{book.reason}</p>
+                  <p className="text-sm italic text-[#a39a86]">{book.genre} · {book.mood}</p>
                 </div>
               ))}
             </div>

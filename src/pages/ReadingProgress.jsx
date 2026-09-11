@@ -44,13 +44,13 @@ function ReadingProgress() {
 
   return (
     <div className="max-w-3xl mx-auto py-16">
-      <h1 className="text-3xl font-medium mb-2">Reading Progress</h1>
-      <p className="text-[#9a9186] mb-10">Books currently in progress</p>
+      <h1 className="text-3xl font-medium mb-2 text-[#2b2620]">Reading Progress</h1>
+      <p className="text-[#7a7060] mb-10">Books currently in progress</p>
 
       {loading ? (
-        <p className="text-[#9a9186]">Loading...</p>
+        <p className="text-[#7a7060]">Loading...</p>
       ) : books.length === 0 ? (
-        <p className="text-[#9a9186]">
+        <p className="text-[#7a7060]">
           You're not currently reading anything. Mark a book as "Reading" from your library to see it here.
         </p>
       ) : (
@@ -61,37 +61,37 @@ function ReadingProgress() {
               : 0
 
             return (
-              <div key={book._id} className="border border-[#3a352d] bg-[#161310] rounded-lg px-5 py-5">
+              <div key={book._id} className="bg-white border border-[#e3dcc9] rounded-lg px-5 py-5">
                 <div className="flex justify-between items-start mb-3">
                   <div>
-                    <h3 className="text-lg font-semibold">{book.title}</h3>
-                    <p className="text-[#9a9186] text-sm">by {book.author}</p>
+                    <h3 className="text-lg font-semibold text-[#2b2620]">{book.title}</h3>
+                    <p className="text-[#7a7060] text-sm">by {book.author}</p>
                   </div>
-                  <span className="text-[#c9a96e] font-medium text-sm">{percent}%</span>
+                  <span className="text-[#a8763a] font-medium text-sm">{percent}%</span>
                 </div>
 
-                <div className="w-full h-1.5 bg-[#2a2520] rounded-full overflow-hidden mb-4">
+                <div className="w-full h-1.5 bg-[#f2ecdd] rounded-full overflow-hidden mb-4">
                   <div
-                    className="h-full bg-[#c9a96e] transition-all duration-300"
+                    className="h-full bg-[#a8763a] transition-all duration-300"
                     style={{ width: `${percent}%` }}
                   ></div>
                 </div>
 
                 {book.totalPages > 0 ? (
                   <div className="flex items-center gap-3 flex-wrap">
-                    <label className="text-sm text-[#9a9186]">Current page:</label>
+                    <label className="text-sm text-[#7a7060]">Current page:</label>
                     <input
                       type="number"
                       min="0"
                       max={book.totalPages}
                       value={book.currentPage}
                       onChange={(e) => updatePage(book._id, e.target.value)}
-                      className="w-20 px-3 py-1 rounded-md bg-[#0e0c0a] border border-[#3a352d] text-[#f4ede1] text-sm focus:outline-none focus:border-[#c9a96e]"
+                      className="w-20 px-3 py-1 rounded-md bg-white border border-[#e3dcc9] text-[#2b2620] text-sm focus:outline-none focus:border-[#a8763a]"
                     />
-                    <span className="text-sm text-[#9a9186]">of {book.totalPages} pages</span>
+                    <span className="text-sm text-[#7a7060]">of {book.totalPages} pages</span>
                   </div>
                 ) : (
-                  <p className="text-xs text-[#6b6357]">
+                  <p className="text-xs text-[#a39a86]">
                     No total page count set for this book — edit it in My Library to track progress by percentage.
                   </p>
                 )}
