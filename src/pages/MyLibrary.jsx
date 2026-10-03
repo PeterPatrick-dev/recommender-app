@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import { API_URL } from '../config'
 
 const statusStyles = {
   "Reading": { border: "border-l-[#a8763a]", icon: "📖", badge: "bg-[#f5e8d3] text-[#a8763a]" },
@@ -28,7 +29,7 @@ function MyLibrary() {
     const token = localStorage.getItem('token')
     if (!token) return
     try {
-      const response = await axios.get('http://localhost:5000/api/books', {
+      const response = await axios.get(`${API_URL}/api/books`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       setBooks(response.data)
@@ -47,7 +48,7 @@ function MyLibrary() {
     }
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/books',
+        `${API_URL}/api/books`,
         { title, author, category: category || "Uncategorized", totalPages: Number(totalPages) || 0 },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -65,7 +66,7 @@ function MyLibrary() {
   async function removeBook(id) {
     const token = localStorage.getItem('token')
     try {
-      await axios.delete(`http://localhost:5000/api/books/${id}`, {
+      await axios.delete(`${API_URL}/api/books/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       setBooks(books.filter((book) => book._id !== id))
@@ -78,7 +79,7 @@ function MyLibrary() {
     const token = localStorage.getItem('token')
     try {
       const response = await axios.patch(
-        `http://localhost:5000/api/books/${id}`,
+        `${API_URL}/api/books/${id}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -110,7 +111,7 @@ function MyLibrary() {
       if (searchQuery) params.append('q', searchQuery)
       if (genreFilter) params.append('genre', genreFilter)
       if (minRating) params.append('minRating', minRating)
-      const response = await axios.get(`http://localhost:5000/api/books/search?${params.toString()}`, {
+      const response = await axios.get(`${API_URL}/api/books/search?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       setBooks(response.data)
@@ -130,7 +131,7 @@ function MyLibrary() {
   const totalPagesRead = books.reduce((sum, b) => sum + (b.status === "Completed" ? (b.totalPages || 0) : (b.currentPage || 0)), 0)
 
   return (
-    <div className="max-w-5xl mx-auto py-16">
+    <div className="py-16">
       <div className="flex justify-between items-start mb-8">
         <div>
           <h1 className="text-3xl font-medium mb-1 text-[#2b2620]">My Library</h1>

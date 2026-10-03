@@ -35,7 +35,7 @@ function Settings() {
   }
 
   return (
-    <div className="max-w-lg mx-auto py-16">
+    <div className="max-w-lg py-16">
       <h1 className="text-3xl font-medium mb-10 text-[#2b2620]">Settings</h1>
 
       <form onSubmit={handleSave} className="flex flex-col gap-8 bg-white border border-[#e3dcc9] rounded-xl p-6">

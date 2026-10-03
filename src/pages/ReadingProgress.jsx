@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { API_URL } from '../config'
 
 function ReadingProgress() {
   const [books, setBooks] = useState([])
@@ -14,7 +15,7 @@ function ReadingProgress() {
       }
 
       try {
-        const response = await axios.get('http://localhost:5000/api/books/reading', {
+        const response = await axios.get(`${API_URL}/api/books/reading`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         setBooks(response.data)
@@ -32,7 +33,7 @@ function ReadingProgress() {
     const token = localStorage.getItem('token')
     try {
       const response = await axios.patch(
-        `http://localhost:5000/api/books/${id}/progress`,
+        `${API_URL}/api/books/${id}/progress`,
         { currentPage: Number(newPage) },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -43,7 +44,7 @@ function ReadingProgress() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto py-16">
+    <div className="max-w-3xl py-16">
       <h1 className="text-3xl font-medium mb-2 text-[#2b2620]">Reading Progress</h1>
       <p className="text-[#7a7060] mb-10">Books currently in progress</p>
 

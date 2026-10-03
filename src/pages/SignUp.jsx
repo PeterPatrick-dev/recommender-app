@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_URL } from '../config'
 
 function SignUp() {
   const [name, setName] = useState("")
@@ -16,7 +17,7 @@ function SignUp() {
     setLoading(true)
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/signup', { name, email, password })
+      const response = await axios.post(`${API_URL}/api/auth/signup`, { name, email, password })
       localStorage.setItem('token', response.data.token || '')
       localStorage.setItem('user', JSON.stringify(response.data.user))
       navigate('/profile')
@@ -28,7 +29,7 @@ function SignUp() {
   }
 
   return (
-    <div className="max-w-sm mx-auto py-16">
+    <div className="max-w-sm py-16">
       <h1 className="text-3xl font-medium mb-2 text-center text-[#2b2620]">Create your account</h1>
       <p className="text-[#7a7060] text-center mb-8">Start getting personalized book recommendations.</p>
 

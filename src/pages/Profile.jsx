@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { API_URL } from '../config'
 
 function Profile() {
   const [user, setUser] = useState(null)
@@ -17,7 +18,7 @@ function Profile() {
 
     async function fetchHistory() {
       try {
-        const response = await axios.get('http://localhost:5000/api/recommendations/history', {
+        const response = await axios.get(`${API_URL}/api/recommendations/history`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         setHistory(response.data)
@@ -28,7 +29,7 @@ function Profile() {
 
     async function fetchStats() {
       try {
-        const response = await axios.get('http://localhost:5000/api/analytics', {
+        const response = await axios.get(`${API_URL}/api/analytics`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         setStats(response.data)
@@ -50,7 +51,7 @@ function Profile() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto py-16">
+    <div className="max-w-2xl py-16">
       <div className="flex items-center gap-6 mb-10">
         <div className="w-20 h-20 rounded-full bg-[#a8763a] text-white flex items-center justify-center text-2xl font-medium flex-shrink-0">
           {user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}

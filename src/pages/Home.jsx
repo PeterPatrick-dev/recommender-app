@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 function Home() {
   return (
-    <div className="max-w-5xl mx-auto py-16">
+    <div className="py-16">
       <div className="grid md:grid-cols-2 gap-10 items-center mb-16">
         <div>
           <span className="inline-block text-sm text-[#a8763a] bg-[#f5e8d3] px-3 py-1 rounded-full mb-4">
@@ -32,14 +32,14 @@ function Home() {
           </div>
         </div>
 
-        <div className="relative h-56 hidden md:block">
-          <div className="absolute top-8 left-4 w-28 h-40 bg-[#e8ddf0] rounded-xl -rotate-6 flex items-end p-4">
+              <div className="relative h-56 hidden md:block">
+          <div className="absolute top-8 left-4 w-28 h-40 bg-[#e8ddf0] rounded-xl -rotate-6 flex items-end p-4" style={{ animation: 'float 3s ease-in-out infinite' }}>
             <span className="text-2xl">📖</span>
           </div>
-          <div className="absolute top-2 left-24 w-28 h-40 bg-[#d9eef0] rounded-xl rotate-3 flex items-end p-4">
+          <div className="absolute top-2 left-24 w-28 h-40 bg-[#d9eef0] rounded-xl rotate-3 flex items-end p-4" style={{ animation: 'float 3s ease-in-out infinite 0.4s' }}>
             <span className="text-2xl">📖</span>
           </div>
-          <div className="absolute top-10 left-44 w-28 h-40 bg-[#f5e8d3] rounded-xl rotate-9 flex items-end p-4">
+          <div className="absolute top-10 left-44 w-28 h-40 bg-[#f5e8d3] rounded-xl rotate-9 flex items-end p-4" style={{ animation: 'float 3s ease-in-out infinite 0.8s' }}>
             <span className="text-2xl">📖</span>
           </div>
         </div>

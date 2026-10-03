@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { API_URL } from '../config'
 
 const questions = [
   { id: "world", text: "What kind of world do you want to escape into?", type: "choice", options: ["Fantasy realm", "Sci-fi future", "Real-world drama", "Historical setting", "Mystery/thriller"] },
@@ -23,7 +24,7 @@ function Recommendation() {
     try {
       const token = localStorage.getItem('token')
       const response = await axios.post(
-        'http://localhost:5000/api/recommend',
+        `${API_URL}/api/recommend`,
         finalAnswers,
         token ? { headers: { Authorization: `Bearer ${token}` } } : {}
       )
@@ -56,7 +57,7 @@ function Recommendation() {
   }
 
   return (
-    <div className="max-w-lg mx-auto py-10">
+    <div className="max-w-lg py-10">
       {step < questions.length ? (
         <div className="w-full">
           <div className="w-full h-1 bg-[#e3dcc9] rounded-full mb-8 overflow-hidden">
