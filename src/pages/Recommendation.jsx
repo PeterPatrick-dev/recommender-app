@@ -11,6 +11,65 @@ const questions = [
   { id: "avoid", text: "Anything you want to avoid? (optional)", type: "text", optional: true }
 ]
 
+// Small helper component that renders Read / Borrow / Buy buttons based on book.links
+function BookActions({ links }) {
+  if (!links) return null
+
+  if (links.type === 'read') {
+    return (
+      <div className="mt-3">
+        <a
+          href={links.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block px-4 py-2 rounded-lg bg-[#a8763a] text-white text-sm font-medium hover:bg-[#b8854a] transition-colors"
+        >
+          📖 Read Now — {links.source}
+        </a>
+      </div>
+    )
+  }
+
+  if (links.type === 'buy') {
+    return (
+      <div className="flex flex-wrap gap-2 mt-3">
+        {links.libbyUrl && (
+          <a
+            href={links.libbyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3 py-1.5 rounded-lg border border-[#a8763a] text-[#a8763a] text-sm font-medium hover:bg-[#a8763a] hover:text-white transition-colors"
+          >
+            Borrow from Library
+          </a>
+        )}
+        {links.amazonUrl && (
+          <a
+            href={links.amazonUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3 py-1.5 rounded-lg border border-[#e3dcc9] text-[#5a5346] text-sm hover:border-[#a8763a] hover:text-[#a8763a] transition-colors"
+          >
+            Buy on Amazon
+          </a>
+        )}
+        {links.bookshopUrl && (
+          <a
+            href={links.bookshopUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3 py-1.5 rounded-lg border border-[#e3dcc9] text-[#5a5346] text-sm hover:border-[#a8763a] hover:text-[#a8763a] transition-colors"
+          >
+            Buy on Bookshop
+          </a>
+        )}
+      </div>
+    )
+  }
+
+  return null
+}
+
 function Recommendation() {
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState({})
@@ -121,6 +180,7 @@ function Recommendation() {
                   <p className="text-[#a8763a] text-sm mb-2">by {book.author}</p>
                   <p className="text-[#5a5346] mb-2">{book.reason}</p>
                   <p className="text-sm italic text-[#a39a86]">{book.genre} · {book.mood}</p>
+                  <BookActions links={book.links} />
                 </div>
               ))}
             </div>

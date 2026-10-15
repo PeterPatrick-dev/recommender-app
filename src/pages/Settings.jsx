@@ -1,19 +1,58 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { API_URL } from '../config'
 
 function Settings() {
+  const navigate = useNavigate()
   const [dailyReminders, setDailyReminders] = useState(
     localStorage.getItem('dailyReminders') !== 'false'
   )
   const [continueReadingAlerts, setContinueReadingAlerts] = useState(true)
-  const [name, setName] = useState("Priest Peterson")
-  const [email, setEmail] = useState("priest@example.com")
-  const [saved, setSaved] = useState(false)
 
-  function handleSave(e) {
+  // Read the real logged-in user from localStorage
+  const storedUser = JSON.parse(localStorage.getItem('user') || '{}')
+  const [name, setName] = useState(storedUser.name || '')
+  const [email, setEmail] = useState(storedUser.email || '')
+
+  const [saved, setSaved] = useState(false)
+  const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false)
+
+  const isLoggedIn = !!localStorage.getItem('token')
+
+  async function handleSave(e) {
     e.preventDefault()
-    localStorage.setItem('dailyReminders', dailyReminders)
-    console.log("Settings saved:", { name, email, dailyReminders, continueReadingAlerts })
-    setSaved(true)
+    setSaved(false)
+    setError('')
+    setSaving(true)
+
+    try {
+      localStorage.setItem('dailyReminders', dailyReminders)
+
+      const token = localStorage.getItem('token')
+      const response = await axios.patch(
+        `${API_URL}/api/users/me`,
+        { name, email },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+
+      // Update localStorage with the fresh user data so other pages pick it up
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+
+      setSaved(true)
+    } catch (err) {
+      const msg = err.response?.data?.error || 'Something went wrong saving your settings'
+      setError(msg)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    navigate('/login')
   }
 
   function Toggle({ enabled, onToggle }) {
@@ -87,17 +126,39 @@ function Settings() {
 
         <button
           type="submit"
-          className="px-6 py-3 rounded-lg bg-[#a8763a] text-white font-medium hover:bg-[#b8854a] transition-colors self-start"
+          disabled={saving}
+          className="px-6 py-3 rounded-lg bg-[#a8763a] text-white font-medium hover:bg-[#b8854a] transition-colors self-start disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Save Changes
+          {saving ? 'Saving...' : 'Save Changes'}
         </button>
 
         {saved && (
-          <p className="text-sm text-[#7a7060]">
-            Settings saved.
+          <p className="text-sm text-[#a8763a]">
+            ✓ Settings saved.
+          </p>
+        )}
+        {error && (
+          <p className="text-sm text-[#b4513f]">
+            {error}
           </p>
         )}
       </form>
+
+      {isLoggedIn && (
+        <div className="mt-6 bg-white border border-[#e3dcc9] rounded-xl p-6">
+          <h2 className="text-sm tracking-wide text-[#a8763a] uppercase mb-4">Session</h2>
+          <p className="text-sm text-[#7a7060] mb-4">
+            Logging out will end your session on this device. You'll need to log in again to access your library.
+          </p>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="px-6 py-3 rounded-lg border border-[#b4513f] text-[#b4513f] font-medium hover:bg-[#b4513f] hover:text-white transition-colors"
+          >
+            Log Out
+          </button>
+        </div>
+      )}
     </div>
   )
 }
